@@ -1,0 +1,77 @@
+# Generated .gitignore for a .NET 8 / Visual Studio project
+# Keeps compiled output, user-specific files and sensitive data out of source control
+
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build results
+[Bb]in/
+[Oo]bj/
+out/
+
+# Publish output
+**/publish/
+
+# Rider
+.idea/
+*.sln.iml
+
+# Visual Studio Code
+.vscode/
+
+# NuGet
+*.nupkg
+packages/
+.nuget/packages/
+project.lock.json
+project.fragment.lock.json
+
+# Logs
+*.log
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Runtime
+*.exe
+*.dll
+*.pdb
+
+# Database files
+*.mdf
+*.ldf
+*.db
+
+# User secrets and local settings (keep development secrets out of repo)
+appsettings.Development.json
+secrets.json
+.env
+
+# IIS Express
+IISExpress/
+
+# JetBrains
+*.iml
+
+# DotNet Watch
+.dotnetwatch/
+
+# Coverage and test results
+coverage*/
+TestResults/
+
+# Temporary files
+*.tmp
+~$*
+
+# Ignore object and binary directories in any subfolder
+**/[Bb]in/**
+**/[Oo]bj/**
+
+# Keep migrations tracked (do NOT ignore folders named Migrations)
+# End of .gitignore
