@@ -18,7 +18,7 @@ namespace Hospital_Management_System_WebAPI.Repository.ServiceImplementation
 
 
         // Adds a new doctor record to the database using a stored procedure
-        public async Task AddDoctorAsync(CreateDoctorDto dto)
+        public async Task<int> AddDoctorAsync(CreateDoctorDto dto)
         {
             using SqlConnection con = _dbHelper.GetConnection();
 
@@ -34,12 +34,13 @@ namespace Hospital_Management_System_WebAPI.Repository.ServiceImplementation
 
             await con.OpenAsync();
 
-            int rows = await cmd.ExecuteNonQueryAsync();
+            int doccode = Convert.ToInt32(await cmd.ExecuteScalarAsync());
 
-            if (rows == 0)
+            if (doccode == 0)
             {
                 throw new Exception("Doctor could not be added.");
             }
+            return doccode;
         }
 
 
@@ -119,6 +120,40 @@ namespace Hospital_Management_System_WebAPI.Repository.ServiceImplementation
             }
 
             return doctors;
+        }
+
+        public async Task<Doctor> GetDoctorByCodeAsync(int code)
+        {
+            Doctor doctor = null;
+            using SqlConnection con = _dbHelper.GetConnection();
+
+            using SqlCommand cmd =
+                new SqlCommand("sp_GetDoctorById", con);
+
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            cmd.Parameters.AddWithValue("@DoctorCode",code);
+
+            try
+            {
+                await con.OpenAsync();
+
+                using SqlDataReader reader =
+                    await cmd.ExecuteReaderAsync();
+
+                if (await reader.ReadAsync())
+                {
+                    doctor = MapDoctor(reader);
+
+                }
+            }
+            catch (SqlException)
+            {
+
+                throw;
+            }
+
+            return doctor;
         }
     }
 }

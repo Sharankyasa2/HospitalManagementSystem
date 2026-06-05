@@ -40,7 +40,7 @@ namespace Hospital_Management_Web_Api.Controllers
         [HttpPost]
         public async Task<ActionResult> AddPatient(CreatePatientDto dto)
         {
-            await _patientService.AddPatientAsync(dto);
+            int code = await _patientService.AddPatientAsync(dto);
             string? email = dto.Email;
             if (!string.IsNullOrWhiteSpace(email))
             {
@@ -58,7 +58,7 @@ namespace Hospital_Management_Web_Api.Controllers
                                 Your registration was successfully completed on
                                 <strong>{DateTime.Now:dd MMMM yyyy hh:mm tt}</strong>.
                             </p>
-
+                            <p>Registration code created : {code}</p>
                             <p>Thank you for choosing us.</p>
 
                             <br/>
@@ -70,7 +70,7 @@ namespace Hospital_Management_Web_Api.Controllers
             }
             return StatusCode(
                 StatusCodes.Status201Created,//sending 201 code for creation successful
-                "Patient added successfully");
+                $"Patient added successfully with Patient code {code}");
         }
 
         //http method to Update patient 

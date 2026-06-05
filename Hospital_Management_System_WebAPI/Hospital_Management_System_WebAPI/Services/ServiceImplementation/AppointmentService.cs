@@ -16,11 +16,11 @@ namespace Hospital_Management_System_WebAPI.Services.ServiceImplementation
         }
 
         // Validates and books a new appointment via repository
-        public async Task BookAppointmentAsync(BookAppointmentDto dto)
+        public async Task<int> BookAppointmentAsync(BookAppointmentDto dto)
         {
             if (dto.DoctorCode <= 0)
                 throw new Exception("Invalid doctor");
-            await _repo.BookAppointmentAsync(dto);
+            return await _repo.BookAppointmentAsync(dto);
         }
 
         // Cancels an appointment identified by its id after validation
@@ -45,6 +45,11 @@ namespace Hospital_Management_System_WebAPI.Services.ServiceImplementation
                 throw new Exception("Invalid doctor code");
 
             return await _repo.GetDoctorAppointmentsAsync(doctorCode);
+        }
+
+        public async Task<Appointment> GetAppointmentByIdAsync(int id)
+        {
+            return await _repo.GetAppointmentByIdAsync(id);
         }
     }
 }

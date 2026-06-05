@@ -32,6 +32,8 @@ BEGIN
             GETDATE()
         );
 
+        SELECT SCOPE_IDENTITY();
+
         COMMIT;
 
     END TRY
@@ -71,6 +73,30 @@ BEGIN
     END CATCH
 END
 
+--get doctor by doctor code
+CREATE PROCEDURE sp_GetDoctorById
+    @DoctorCode INT
+AS
+BEGIN
+    IF NOT EXISTS
+    (
+        SELECT 1 FROM Doctors WHERE DoctorCode = @DoctorCode AND IsAvailable = 1
+    )
+    BEGIN
+        THROW 50003,'Doctor data Does not exist with this code',2
+    END
+        SELECT
+            DoctorCode,
+            FullName,
+            Specialization,
+            Phone,
+            ConsultationFee,
+            IsAvailable,
+            CreatedAt,
+            UpdatedAt
+        FROM Doctors
+        WHERE DoctorCode = @DoctorCode;
+END
 
 
 -- get doctor by specialization

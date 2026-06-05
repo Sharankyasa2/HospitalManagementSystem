@@ -58,6 +58,7 @@ BEGIN
             'Scheduled',
             GETDATE()
         );
+        SELECT SCOPE_IDENTITY()
 
         COMMIT;
 
@@ -165,6 +166,13 @@ CREATE PROCEDURE sp_GetDoctorAppointments
 )
 AS
 BEGIN
+    IF NOT EXISTS
+    (
+        SELECT 1 FROM DOCTORS WHERE DoctorCode = @DoctorCode
+    )
+    BEGIN
+        THROW 50003,'Doctor Doesnot exist with this code',2
+    END
     BEGIN TRY
 
         SELECT
@@ -219,3 +227,31 @@ BEGIN
 
     END CATCH
 END
+
+--procedure to get appointment by id
+Create PROCEDURE sp_GetAppointmentById
+(
+    @AppointmentId INT
+)
+AS
+BEGIN
+    IF NOT EXISTS
+    (
+        SELECT 1 FROM Appointments
+        WHERE AppointmentId = @AppointmentId 
+    )
+    BEGIN
+        THROW 5003,"No Appointment Exist with this Id",2
+    END
+
+        SELECT
+            AppointmentId,
+            PatientCode,
+            DoctorCode,
+            AppointmentDate,
+            AppointmentStatus,
+            CancelledAt
+        FROM Appointments
+        WHERE AppointmentId=@AppointmentId;
+
+END;

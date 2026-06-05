@@ -36,7 +36,7 @@ BEGIN
             GETDATE(),
             GETDATE()
         );
-
+        SELECT SCOPE_IDENTITY();
         COMMIT;
 
     END TRY
@@ -138,13 +138,20 @@ BEGIN
 
     END CATCH
 END
+
+
 --get patient by id
 CREATE PROCEDURE sp_GetPatientById
     @PatientCode INT
 AS
 BEGIN
-    BEGIN TRY
-
+    IF NOT EXISTS
+    (
+        SELECT 1 FROM Patients WHERE PatientCode = @PatientCode AND IsActive = 1
+    )
+    BEGIN
+        THROW 50003,'Patient Does not exist with this code',2
+    END
         SELECT
             PatientCode,
             FullName,
@@ -158,19 +165,6 @@ BEGIN
         FROM Patients
         WHERE PatientCode = @PatientCode
           AND IsActive = 1;
-
-        IF @@ROWCOUNT = 0
-        BEGIN
-            THROW 50003, 'Patient not found', 1;
-        END
-
-    END TRY
-
-    BEGIN CATCH
-
-        THROW;
-
-    END CATCH
 END
 
 

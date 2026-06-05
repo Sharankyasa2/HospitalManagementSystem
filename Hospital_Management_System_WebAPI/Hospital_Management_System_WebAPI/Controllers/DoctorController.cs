@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hospital_Management_Web_Api.Controllers
-{ 
+{
     [Route("api/[controller]")]
     [ApiController]
     public class DoctorController : ControllerBase
@@ -25,9 +25,8 @@ namespace Hospital_Management_Web_Api.Controllers
         [HttpPost]
         public async Task<IActionResult> AddDoctor(CreateDoctorDto dto)
         {
-            await _doctorService.AddDoctorAsync(dto);
-
-            return StatusCode(201, "Doctor added successfully");
+            int docCode = await _doctorService.AddDoctorAsync(dto);
+            return StatusCode(201, $"Doctor added successfully with code : {docCode}");
         }
 
         //Method to send all Availabe Doctors
@@ -38,6 +37,12 @@ namespace Hospital_Management_Web_Api.Controllers
             var doctors = await _doctorService.GetDoctorsAsync();
 
             return Ok(doctors);
+        }
+
+        [HttpGet("{DoctorCode}")]
+        public async Task<IActionResult> GetDoctorByCode(int DoctorCode)
+        {
+            return Ok(await _doctorService.GetDoctorByCode(DoctorCode));
         }
 
         //Http Methods to get Doctors By Specialization and who are available

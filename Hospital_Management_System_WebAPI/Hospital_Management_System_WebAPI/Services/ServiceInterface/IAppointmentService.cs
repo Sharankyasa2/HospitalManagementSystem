@@ -5,8 +5,11 @@ namespace Hospital_Management_Web_Api.Services.Interface
 {
     public interface IAppointmentService
     {
-        Task BookAppointmentAsync(BookAppointmentDto dto);
+        Task<int> BookAppointmentAsync(BookAppointmentDto dto);
         Task CancelAppointmentAsync(int appointmentId);
+
+        Task<Appointment> GetAppointmentByIdAsync(int id);
+
         Task<List<Appointment>> GetUpcomingAppointmentsAsync();
         Task<List<Appointment>> GetDoctorAppointmentsAsync(int doctorCode);
     }

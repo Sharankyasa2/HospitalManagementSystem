@@ -18,7 +18,7 @@ namespace Hospital_Management_System_WebAPI.Repository.ServiceImplementation
 
 
         // Books an appointment record in the database via stored procedure
-        public async Task BookAppointmentAsync(BookAppointmentDto dto)
+        public async Task<int> BookAppointmentAsync(BookAppointmentDto dto)
         {
             using SqlConnection con = _dbHelper.GetConnection();
 
@@ -31,7 +31,7 @@ namespace Hospital_Management_System_WebAPI.Repository.ServiceImplementation
             cmd.Parameters.AddWithValue("@AppointmentDate", dto.AppointmentDate);
 
             await con.OpenAsync();
-            await cmd.ExecuteNonQueryAsync();
+            return Convert.ToInt32(await cmd.ExecuteScalarAsync());
         }
 
         // Cancels an appointment record identified by appointment id
@@ -144,7 +144,7 @@ namespace Hospital_Management_System_WebAPI.Repository.ServiceImplementation
                 AppointmentId = Convert.ToInt32(reader["AppointmentId"]),
                 PatientCode = Convert.ToInt32(reader["PatientCode"]),
                 DoctorCode = Convert.ToInt32(reader["DoctorCode"]),
-                AppointmentDate = Convert.ToDateTime(reader["AppointmentDate"]),
+                AppointmentDate = Convert.ToDateTime(reader ["AppointmentDate"]),
                 AppointmentStatus = reader["AppointmentStatus"].ToString()!,
 
                 CancelledAt =
@@ -152,6 +152,30 @@ namespace Hospital_Management_System_WebAPI.Repository.ServiceImplementation
                     ? null
                     : Convert.ToDateTime(reader["CancelledAt"])
             };
+        }
+
+        public async Task<Appointment> GetAppointmentByIdAsync(int id)
+        {
+            Appointment appointment = new Appointment();
+
+            using SqlConnection con = _dbHelper.GetConnection();
+
+            await con.OpenAsync();
+
+            using SqlCommand cmd = new("sp_GetAppointmentById", con);
+
+
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@AppointmentId", id);
+
+            using SqlDataReader reader = await cmd.ExecuteReaderAsync();
+
+            if (await reader.ReadAsync())
+            {
+                appointment = MapAppointment(reader);
+            }
+
+            return appointment;
         }
     }
 }

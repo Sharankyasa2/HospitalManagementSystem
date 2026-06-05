@@ -1,0 +1,60 @@
+# Top-level .gitignore for HospitalMSProject repository
+# Keeps IDE, build, and local files out of source control
+
+# Visual Studio and .NET
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+[Bb]in/
+[Oo]bj/
+*.exe
+*.dll
+*.pdb
+
+# Rider
+.idea/
+
+# VS Code
+.vscode/
+
+# NuGet
+*.nupkg
+packages/
+.nuget/packages/
+
+# Publish output
+**/publish/
+
+# Logs
+*.log
+TestResults/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Secrets and environment
+.env
+appsettings.Development.json
+secrets.json
+
+# Database files
+*.mdf
+*.ldf
+
+# Node
+node_modules/
+
+# Ignore any generated binary/content directories across the repo
+**/[Bb]in/**
+**/[Oo]bj/**
+
+# OneDrive / temporary files
+~$*
+
+# Coverage
+coverage*/
+
+# End of file

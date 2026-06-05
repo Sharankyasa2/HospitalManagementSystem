@@ -20,7 +20,7 @@ namespace Hospital_Management_System_WebAPI.Services.ServiceImplementation
 
 
         // Validates and adds a new doctor record via repository
-        public async Task AddDoctorAsync(CreateDoctorDto dto)
+        public async Task<int> AddDoctorAsync(CreateDoctorDto dto)
         {
             if (string.IsNullOrWhiteSpace(dto.FullName))
                 throw new Exception("Doctor name is required.");
@@ -31,7 +31,7 @@ namespace Hospital_Management_System_WebAPI.Services.ServiceImplementation
             if (dto.ConsultationFee <= 0)
                 throw new Exception("Consultation fee must be greater than zero.");
 
-            await _doctorRepository.AddDoctorAsync(dto);
+            return await _doctorRepository.AddDoctorAsync(dto);
         }
 
         // Retrieves all doctors from the repository
@@ -56,6 +56,9 @@ namespace Hospital_Management_System_WebAPI.Services.ServiceImplementation
             return await _doctorRepository.GetDoctorsBySpecializationAsync(specialization);
         }
 
-
+        public async Task<Doctor> GetDoctorByCode(int code)
+        {
+            return await _doctorRepository.GetDoctorByCodeAsync(code);
+        }
     }
 }

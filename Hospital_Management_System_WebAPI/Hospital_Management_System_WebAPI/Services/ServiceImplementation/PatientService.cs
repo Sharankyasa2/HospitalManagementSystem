@@ -22,7 +22,7 @@ namespace Hospital_Management_System_WebAPI.Services.ServiceImplementation
 
 
         // Validates and adds a new patient record via repository
-        public async Task AddPatientAsync(CreatePatientDto dto)
+        public async Task<int> AddPatientAsync(CreatePatientDto dto)
         {
             if (dto.Phone.Length > 12)
             {
@@ -33,7 +33,7 @@ namespace Hospital_Management_System_WebAPI.Services.ServiceImplementation
             {
                 throw new Exception("DOB cannot be a future date...");
             }
-            await _patientRepository.AddPatientAsync(dto);
+            return await _patientRepository.AddPatientAsync(dto);
         }
 
 

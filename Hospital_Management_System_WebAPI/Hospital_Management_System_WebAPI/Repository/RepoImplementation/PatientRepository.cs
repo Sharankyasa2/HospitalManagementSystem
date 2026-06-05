@@ -24,8 +24,9 @@ namespace Hospital_Management_System_WebAPI.Repository.ServiceImplementation
 
 
         // Adds a new patient record to the database using a stored procedure
-        public async Task AddPatientAsync(CreatePatientDto dto)
+        public async Task<int> AddPatientAsync(CreatePatientDto dto)
         {
+            int code = 0;
             try
             {
                 using (SqlConnection con = _dbHelper.GetConnection())
@@ -39,20 +40,19 @@ namespace Hospital_Management_System_WebAPI.Repository.ServiceImplementation
 
                     cmd.CommandType = CommandType.StoredProcedure;
                     await con.OpenAsync();
-                    var rowsAffected = await cmd.ExecuteNonQueryAsync();
+                    code = Convert.ToInt32(await cmd.ExecuteScalarAsync());
 
-                    if (rowsAffected == 0)
+                    if (code == 0)
                     {
                         throw new Exception("Failed to add patient.");
                     }
-
-
                 }
             }
             catch (Exception)
             {
                 throw;
             }
+            return code;
 
         }
 

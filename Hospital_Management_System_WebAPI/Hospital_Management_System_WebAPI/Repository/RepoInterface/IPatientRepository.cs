@@ -6,7 +6,7 @@ namespace Hospital_Management_Web_Api.Repositories.Interface
 {
     public interface IPatientRepository
     {
-        Task AddPatientAsync(CreatePatientDto dto);
+        Task<int> AddPatientAsync(CreatePatientDto dto);
 
         Task UpdatePatientAsync(int patientCode, UpdatePatientDto dto);
 

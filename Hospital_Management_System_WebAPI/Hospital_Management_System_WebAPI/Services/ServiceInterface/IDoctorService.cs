@@ -5,7 +5,9 @@ namespace Hospital_Management_Web_Api.Services.Interface
 {
     public interface IDoctorService
     {
-        Task AddDoctorAsync(CreateDoctorDto dto);
+        Task<int> AddDoctorAsync(CreateDoctorDto dto);
+
+        Task<Doctor> GetDoctorByCode(int code);
 
         Task<List<Doctor>> GetDoctorsAsync();
 
